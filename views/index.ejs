@@ -1,0 +1,36 @@
+<%- include("partials/header") %>
+
+<header class="jumbotron">
+    <h1 class=".ml-md-auto"><span>Conectáte a traves de</span><br>
+        eventos online </h1>
+    <p>Encuentra eventos para todos los gustos</p>
+    <p>
+        <form action="/eventos" method="GET" class="form-inline" id="campground-search">
+            <div class="form-group">
+                <input type="text" name="search" placeholder="buscar eventos" class="form-control">
+            </div>
+        </form>
+    </p>
+    <p>
+        <a class="btn btn-danger btn-lg" href="/eventos/new">Agrega un nuevo evento</a>
+    </p>
+</header>
+<h3>Nuestros eventos mas populares</h3>
+<div class="row text-center" id="evento-grid">
+
+    <% eventos.forEach((evento) =>{ %>
+    <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+
+        <div class="card">
+            <img class="card-img-top" src="<%= evento.image %>" alt="<%= evento.name %>">
+            <div class="card-body">
+                <h5 class="card-title"><%- evento.name -%></h5>
+                <a href="/eventos/<%= evento._id %>" class="btn btn-danger">Mas info</a>
+            </div>
+        </div>
+    </div>
+    <% }); %>
+</div>
+
+
+<%- include("partials/footer") %>
