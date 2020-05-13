@@ -1,3 +1,7 @@
-<h1>SHOW TEMPLATE</h1>
+<%- include("partials/header") %>
 
 <h1><%- evento.name %></h1>
+<img src="<%= evento.image %>" alt="<%= evento.name %>">
+<p><%- evento.description %></p>
+
+<%- include("partials/footer") %>

@@ -1,39 +1,32 @@
 const express = require("express");
 const app = express();
-const request = require("request");
 const bodyparser = require("body-parser");
 const mongoose = require("mongoose");
+const Evento = require("./models/eventos");
+const Comment = require("./models/comment");
+const User = require("./models/user");
 
 mongoose.connect("mongodb://localhost/eva");
 app.set("view engine", "ejs");
 app.use(bodyparser.urlencoded({ extended: true }));
 
-//Schema Setup
-const eventosSchema = new mongoose.Schema({
-  name: String,
-  image: String,
-  description: String,
-});
-
-const Evento = mongoose.model("Evento", eventosSchema);
-
 //agregar eventos
-Evento.create(
-  {
-    name: "Crypto 3.0 Cubrite de los riesgos!",
-    image:
-      "https://cdn.evbuc.com/eventlogos/167194251/clubcashflowargentina28229cnjbgcfgxopia.jpg",
-    description: "descubre todo el poder de las crypto monedas",
-  },
-  (err, evento) => {
-    if (err) {
-      console.log(err);
-    } else {
-      console.log("Evento creado!");
-      console.log(evento);
-    }
-  }
-);
+// Evento.create(
+//   {
+//     name: "Crypto 3.0 Cubrite de los riesgos!",
+//     image:
+//       "https://cdn.evbuc.com/eventlogos/167194251/clubcashflowargentina28229cnjbgcfgxopia.jpg",
+//     description: "descubre todo el poder de las crypto monedas",
+//   },
+//   (err, evento) => {
+//     if (err) {
+//       console.log(err);
+//     } else {
+//       console.log("Evento creado!");
+//       console.log(evento);
+//     }
+//   }
+// );
 
 //Main route
 app.get("/", (req, res) => {
