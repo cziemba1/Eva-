@@ -3,13 +3,14 @@ const app = express();
 const bodyparser = require("body-parser");
 const mongoose = require("mongoose");
 const Evento = require("./models/eventos");
-const Comment = require("./models/comment");
-const User = require("./models/user");
+const Comment = require("./models/comments");
+const seedDB = require("./seed");
 
 mongoose.connect("mongodb://localhost/eva");
 app.set("view engine", "ejs");
 app.use(bodyparser.urlencoded({ extended: true }));
-
+app.use(express.static(__dirname + "/public"));
+seedDB();
 //agregar eventos
 // Evento.create(
 //   {
@@ -28,6 +29,16 @@ app.use(bodyparser.urlencoded({ extended: true }));
 //   }
 // );
 
+/*
+INDEX  /eventos
+NEW    /eventos/new
+CREATE /eventos
+SHOW   /eventos/:id
+
+NEW    eventos/:id/comments/new
+CREATE eventos/:id/comments
+*/
+
 //Main route
 app.get("/", (req, res) => {
   res.render("landing");
@@ -39,18 +50,14 @@ app.get("/eventos", (req, res) => {
     if (err) {
       console.log(err);
     } else {
-      res.render("index", { eventos: todosEventos });
+      res.render("eventos/index", { eventos: todosEventos });
     }
   });
 });
 
 //NEW - formulario para crear eventos
 app.get("/eventos/new", (req, res) => {
-  res.render("new");
-});
-
-app.listen(3000, () => {
-  console.log("server is running");
+  res.render("eventos/new");
 });
 
 //CREATE - Sube el nuevo evento a la db
@@ -75,11 +82,50 @@ app.post("/eventos", (req, res) => {
 
 //SHOW - me muestra mas info de un evento en particular
 app.get("/eventos/:id", (req, res) => {
-  Evento.findById(req.params.id, (err, foundEvento) => {
+  Evento.findById(req.params.id)
+    .populate("comments")
+    .exec((err, foundEvento) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(foundEvento);
+        res.render("eventos/show", { evento: foundEvento });
+      }
+    });
+});
+
+//Comments
+//NEW
+app.get("/eventos/:id/comments/new", (req, res) => {
+  Evento.findById(req.params.id, (err, evento) => {
     if (err) {
       console.log(err);
     } else {
-      res.render("show", { evento: foundEvento });
+      res.render("comments/new", { evento: evento });
+    }
+  });
+});
+
+app.listen(3000, () => {
+  console.log("server is running");
+});
+
+//CREATE
+app.post("/eventos/:id/comments", (req, res) => {
+  Evento.findById(req.params.id, (err, evento) => {
+    if (err) {
+      console.log(err);
+      res.redirect("/eventos");
+    } else {
+      Comment.create(req.body.comment, (err, comment) => {
+        if (err) {
+          console.log(err);
+        } else {
+          evento.comments.push(comment);
+          evento.save();
+          res.redirect(`/eventos/${evento._id}`);
+        }
+      });
     }
   });
 });

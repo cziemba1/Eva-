@@ -1,0 +1,32 @@
+.thumbnail img {
+  width: 100%;
+}
+
+.thumbnail {
+  padding: 0;
+}
+
+.thumbnail .caption-full {
+  padding: 9px;
+}
+
+.eventos-title {
+  padding: 10px 0 30px 80px;
+}
+
+#evento-grid {
+  padding: 0 80px;
+}
+
+.jumbotron {
+  padding: 80px 270px;
+  background-color: rgb(233, 194, 194);
+}
+
+.image-main {
+  position: absolute;
+  width: 45%;
+  left: 50rem;
+  top: 3rem;
+  object-fit: cover;
+}
