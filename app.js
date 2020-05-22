@@ -5,12 +5,34 @@ const mongoose = require("mongoose");
 const Evento = require("./models/eventos");
 const Comment = require("./models/comments");
 const seedDB = require("./seed");
+const passport = require("passport");
+const LocalStrategy = require("passport-local");
+const User = require("./models/user");
 
 mongoose.connect("mongodb://localhost/eva");
 app.set("view engine", "ejs");
 app.use(bodyparser.urlencoded({ extended: true }));
 app.use(express.static(__dirname + "/public"));
 seedDB();
+
+//Passport Configuration
+app.use(
+  require("express-session")({
+    secret: "Eva es la mejor app clon",
+    resave: false,
+    saveUninitialized: false,
+  })
+);
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
+app.use((req, res, next) => {
+  res.locals.currentUser = req.user;
+  next();
+});
 //agregar eventos
 // Evento.create(
 //   {
@@ -50,7 +72,10 @@ app.get("/eventos", (req, res) => {
     if (err) {
       console.log(err);
     } else {
-      res.render("eventos/index", { eventos: todosEventos });
+      res.render("eventos/index", {
+        eventos: todosEventos,
+        currentUser: req.user,
+      });
     }
   });
 });
@@ -96,7 +121,7 @@ app.get("/eventos/:id", (req, res) => {
 
 //Comments
 //NEW
-app.get("/eventos/:id/comments/new", (req, res) => {
+app.get("/eventos/:id/comments/new", isLoggedIn, (req, res) => {
   Evento.findById(req.params.id, (err, evento) => {
     if (err) {
       console.log(err);
@@ -106,12 +131,8 @@ app.get("/eventos/:id/comments/new", (req, res) => {
   });
 });
 
-app.listen(3000, () => {
-  console.log("server is running");
-});
-
 //CREATE
-app.post("/eventos/:id/comments", (req, res) => {
+app.post("/eventos/:id/comments", isLoggedIn, (req, res) => {
   Evento.findById(req.params.id, (err, evento) => {
     if (err) {
       console.log(err);
@@ -128,4 +149,62 @@ app.post("/eventos/:id/comments", (req, res) => {
       });
     }
   });
+});
+
+//Auth Routes
+
+//Show register form
+app.get("/register", (req, res) => {
+  res.render("register");
+});
+
+//Handle signup
+app.post("/register", (req, res) => {
+  const newUser = new User({ username: req.body.username });
+  User.register(newUser, req.body.password, (err, user) => {
+    if (err) {
+      console.log(err);
+      return res.render("register");
+    } else {
+      passport.authenticate("local")(req, res, () => {
+        res.redirect("/eventos");
+      });
+    }
+  });
+});
+
+//LOGIN routes
+
+//Show login form
+app.get("/login", (req, res) => {
+  res.render("login");
+});
+
+//Handle Login logic
+app.post(
+  "/login",
+  passport.authenticate("local", {
+    successRedirect: "/eventos",
+    failureRedirect: "/login",
+  }),
+  (req, res) => {}
+);
+
+//Handle logout
+app.get("/logout", (req, res) => {
+  req.logout();
+  res.redirect("/eventos");
+});
+
+//Login middleware
+function isLoggedIn(req, res, next) {
+  if (req.isAuthenticated()) {
+    return next();
+  } else {
+    res.redirect("/login");
+  }
+}
+
+app.listen(3000, () => {
+  console.log("server is running");
 });
