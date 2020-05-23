@@ -30,3 +30,15 @@
   top: 3rem;
   object-fit: cover;
 }
+
+.delete-form {
+  display: inline;
+}
+
+.button-custom {
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  outline: none;
+  text-decoration: none;
+}

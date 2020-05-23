@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const Evento = require("../models/eventos");
+const middleware = require("../middleware");
 
 //INDEX - lista de eventos
 router.get("/", (req, res) => {
@@ -17,12 +18,12 @@ router.get("/", (req, res) => {
 });
 
 //NEW - formulario para crear eventos
-router.get("/new", isLoggedIn, (req, res) => {
+router.get("/new", middleware.isLoggedIn, (req, res) => {
   res.render("eventos/new");
 });
 
 //CREATE - Sube el nuevo evento a la db
-router.post("/", isLoggedIn, (req, res) => {
+router.post("/", middleware.isLoggedIn, (req, res) => {
   const name = req.body.name;
   const image = req.body.image;
   const desc = req.body.description;
@@ -54,19 +55,41 @@ router.get("/:id", (req, res) => {
       if (err) {
         console.log(err);
       } else {
-        console.log(foundEvento);
         res.render("eventos/show", { evento: foundEvento });
       }
     });
 });
 
-//middleware
-function isLoggedIn(req, res, next) {
-  if (req.isAuthenticated()) {
-    return next();
-  } else {
-    res.redirect("/login");
-  }
-}
+//EDIT : editar eventos (donde se crea el formulario)
+router.get("/:id/edit", middleware.checkEventoPropiedad, (req, res) => {
+  Evento.findById(req.params.id, (err, foundEvento) => {
+    res.render("eventos/edit", { evento: foundEvento });
+  });
+});
+//UPDATE: actualizar eventos (donde se sube el formulario)
+router.put("/:id", middleware.checkEventoPropiedad, (req, res) => {
+  Evento.findByIdAndUpdate(
+    req.params.id,
+    req.body.evento,
+    (err, updatedEvento) => {
+      if (err) {
+        res.redirect("/eventos");
+      } else {
+        res.redirect(`/eventos/${req.params.id}`);
+      }
+    }
+  );
+});
+
+//DESTROY eliminar eventos
+router.delete("/:id", middleware.checkEventoPropiedad, (req, res) => {
+  Evento.findByIdAndRemove(req.params.id, (err) => {
+    if (err) {
+      res.redirect("/eventos");
+    } else {
+      res.redirect("/eventos");
+    }
+  });
+});
 
 module.exports = router;

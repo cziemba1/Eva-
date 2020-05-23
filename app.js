@@ -8,7 +8,7 @@ const seedDB = require("./seed");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
 const User = require("./models/user");
-
+const methodOverride = require("method-override");
 const commentRoutes = require("./routes/comments");
 const eventosRoutes = require("./routes/eventos");
 const indexRoutes = require("./routes/index");
@@ -17,7 +17,8 @@ mongoose.connect("mongodb://localhost/eva");
 app.set("view engine", "ejs");
 app.use(bodyparser.urlencoded({ extended: true }));
 app.use(express.static(__dirname + "/public"));
-seedDB();
+app.use(methodOverride("_method"));
+// seedDB();
 
 //Passport Configuration
 app.use(
