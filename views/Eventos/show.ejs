@@ -17,6 +17,9 @@
                     <div class="pull-right">$9.00</div>
                     <h4><a href=""><%- evento.name %></a></h4>
                     <p><%- evento.description %></p>
+                    <p><em>Creado por </em>
+                        <%- evento.author.username %></em>
+                    </p>
                 </div>
             </div>
             <div class="well">
@@ -28,7 +31,7 @@
                 <% evento.comments.forEach(function (comment){ %>
                 <div class="row">
                     <div class="col-md-12">
-                        <strong><%= comment.author %></strong>
+                        <strong><%= comment.author.username %></strong>
                         <span class="pull-right">10 dias atras</span>
                         <p> <%= comment.text %></p>
                     </div>
