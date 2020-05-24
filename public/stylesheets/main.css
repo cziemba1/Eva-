@@ -1,3 +1,18 @@
+html {
+  height: 100%;
+}
+body {
+  min-height: 100%;
+  position: relative;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.container {
+  margin-bottom: 4rem;
+}
+
 .thumbnail img {
   width: 100%;
 }
@@ -20,7 +35,7 @@
 
 .jumbotron {
   padding: 80px 270px;
-  background-color: rgb(233, 194, 194);
+  background-color: transparent;
 }
 
 .image-main {
@@ -41,4 +56,24 @@
   cursor: pointer;
   outline: none;
   text-decoration: none;
+}
+
+.image-responsive {
+  border: 1px solid brown;
+}
+
+footer {
+  background-color: brown;
+  color: white;
+  padding: 20px;
+  margin-top: auto;
+}
+
+.alert {
+  position: relative;
+  z-index: 100;
+}
+
+.padding-row {
+  padding: 3rem 10rem;
 }

@@ -14,11 +14,11 @@
             <div class="thumbnail ">
                 <img class="image-responsive" src="<%= evento.image %>" alt="<%= evento.name %>">
                 <div class="caption-full caption">
-                    <div class="pull-right">$9.00</div>
+                    <div class="pull-right">$ <%= evento.price %></div>
                     <h4><a href=""><%- evento.name %></a></h4>
                     <p><%- evento.description %></p>
                     <p><em>Creado por </em>
-                        <%- evento.author.username %></em>
+                        <a href="/users/<%- evento.author.id %>"><%- evento.author.username %></a></em>
                     </p>
                     <% if(currentUser && evento.author.id.equals(currentUser._id)){ %>
 
@@ -41,7 +41,7 @@
                         <strong><%= comment.author.username %></strong>
                         <span class="pull-right">10 dias atras</span>
                         <p> <%= comment.text %></p>
-                        <% if(currentUser && comment.author.id.equals(currentUser._id)){ %>
+                        <% if(currentUser && comment.author.id.equals(currentUser._id) || (currentUser && currentUser.isAdmin)){ %>
                         <a class="text-danger button-custom"
                             href="/eventos/<%=evento._id%>/comments/<%=comment._id%>/edit">Editar</a>
                         <form class="delete-form"
@@ -56,12 +56,4 @@
         </div>
     </div>
 </div>
-
-
-
-
-
-
-
-
 <%- include("../partials/footer") %>

@@ -12,12 +12,14 @@ const methodOverride = require("method-override");
 const commentRoutes = require("./routes/comments");
 const eventosRoutes = require("./routes/eventos");
 const indexRoutes = require("./routes/index");
+const flash = require("connect-flash");
 
 mongoose.connect("mongodb://localhost/eva");
 app.set("view engine", "ejs");
 app.use(bodyparser.urlencoded({ extended: true }));
 app.use(express.static(__dirname + "/public"));
 app.use(methodOverride("_method"));
+app.use(flash());
 // seedDB();
 
 //Passport Configuration
@@ -36,6 +38,8 @@ passport.deserializeUser(User.deserializeUser());
 
 app.use((req, res, next) => {
   res.locals.currentUser = req.user;
+  res.locals.error = req.flash("error");
+  res.locals.success = req.flash("success");
   next();
 });
 

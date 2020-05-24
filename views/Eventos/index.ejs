@@ -1,20 +1,20 @@
 <%- include("../partials/header") %>
 
 <header class="jumbotron">
-    <h1 class=".ml-md-auto"><span>Conectáte a traves de</span><br>
-        eventos online </h1>
+    <h1 class=".ml-md-auto"><span>Conectate a traves de</span><br>
+        eventos en todo el pais </h1>
     <p>Encuentra eventos para todos los gustos</p>
-    <p>
-        <form action="/eventos" method="GET" class="form-inline" id="campground-search">
-            <div class="form-group">
-                <input type="text" name="search" placeholder="buscar eventos" class="form-control">
-            </div>
-        </form>
-    </p>
-    <p>
-        <a class="btn btn-danger btn-lg" href="/eventos/new">Agrega un nuevo evento</a>
-    </p>
-    <img class="image-main" src="/undraw_online_calendar_kvu2.png" alt="">
+    <form action="/eventos" method="GET" class="form-inline" id="campground-search">
+        <div class="form-group">
+            <input type="text" name="search" placeholder="Conferencia..." class="form-control">
+            <input type="submit" value="Buscar" class="btn btn-outline-danger">
+        </div>
+    </form>
+    <div class="py-3">
+        <p>O crea el tuyo!</p>
+        <a class="btn btn-outline-danger" href="/eventos/new">Crea tu propio evento!</a>
+    </div>
+    <img class="image-main" src="/1.png" alt="">
 </header>
 
 <h3 class="eventos-title">Nuestros eventos mas populares</h3>
@@ -27,12 +27,14 @@
             <img class="card-img-top" src="<%= evento.image %>" alt="<%= evento.name %>">
             <div class="card-body">
                 <h5 class="card-title"><%- evento.name -%></h5>
+                <p>$ <%- evento.price -%></p>
                 <a href="/eventos/<%= evento._id %>" class="btn btn-danger">Mas info</a>
             </div>
         </div>
     </div>
     <% }); %>
 </div>
+
 
 
 

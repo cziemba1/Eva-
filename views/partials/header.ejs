@@ -14,11 +14,12 @@
 <body>
 
     <nav class="navbar navbar-expand-md mb-4">
-        <a class="navbar-brand text-danger" href="/">EvA </a>
+        <a class="navbar-brand text-danger" href="/eventos">EvA </a>
         <p>
         <form action="/eventos" method="GET" class="form-inline" id="campground-search">
             <div class="form-group">
                 <input type="text" name="search" placeholder="Buscar eventos" class="form-control">
+                <input type="submit" value="Buscar" class="text-danger button-custom">
             </div>
         </form>
         </p>
@@ -49,3 +50,9 @@
 
         </div>
     </nav>
+    <%if(error && error.length > 0){%>
+    <div class="alert alert-danger" role="alert"><%= error %></div>
+    <%}%>
+    <%if(success && success.length > 0){%>
+    <div class="alert alert-success" role="alert"><%= success %></div>
+    <%}%>

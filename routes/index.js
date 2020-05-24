@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const passport = require("passport");
 const User = require("../models/user");
+const Evento = require("../models/eventos");
 
 //Main route
 router.get("/", (req, res) => {
@@ -15,13 +16,24 @@ router.get("/register", (req, res) => {
 
 //Handle signup
 router.post("/register", (req, res) => {
-  const newUser = new User({ username: req.body.username });
+  const newUser = new User({
+    username: req.body.username,
+    firstName: req.body.firstName,
+    lastName: req.body.lastName,
+    avatar: req.body.avatar,
+    email: req.body.email,
+    info: req.body.info,
+  });
+  if (req.body.adminCode === "codigoSecreto123") {
+    newUser.isAdmin = true;
+  }
   User.register(newUser, req.body.password, (err, user) => {
     if (err) {
-      console.log(err);
-      return res.render("register");
+      req.flash("error", err.message);
+      return res.redirect("register");
     } else {
       passport.authenticate("local")(req, res, () => {
+        req.flash("success", `Bienvenido a EvA ${user.username}`);
         res.redirect("/eventos");
       });
     }
@@ -48,16 +60,30 @@ router.post(
 //Handle logout
 router.get("/logout", (req, res) => {
   req.logout();
+  req.flash("success", "Has abandonado la sesion");
   res.redirect("/eventos");
 });
 
-//Login middleware
-function isLoggedIn(req, res, next) {
-  if (req.isAuthenticated()) {
-    return next();
-  } else {
-    res.redirect("/login");
-  }
-}
+//User profile
+router.get("/users/:id", (req, res) => {
+  User.findById(req.params.id, (err, foundUser) => {
+    if (err) {
+      req.flash("error", "Algo salio mal");
+      res.redirect("/eventos");
+    } else {
+      Evento.find()
+        .where("author.id")
+        .equals(foundUser._id)
+        .exec((err, eventos) => {
+          if (err) {
+            req.flash("error", "Algo salio mal");
+            res.redirect("/eventos");
+          } else {
+            res.render("users/show", { user: foundUser, eventos: eventos });
+          }
+        });
+    }
+  });
+});
 
 module.exports = router;

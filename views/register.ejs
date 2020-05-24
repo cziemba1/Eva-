@@ -1,11 +1,55 @@
 <%- include("partials/header") %>
-<h1>Sign up!</h1>
 
-<form action="/register" method="POST">
-    <input type="text" name="username" placeholder="nombre de usuario">
-    <input type="password" name="password" placeholder="password">
-    <button>Sign up</button>
+<h1 class="text-center">Registro de Usuario</h1>
+<div class="container login">
+    <div class="row">
+        <div style="width: 30%; margin: 30px auto;">
+            <form action="/register" method="post">
+                <div class="form-group">
+                    <label for="username">Nombre de Usuario</label>
+                    <input id="username" class="form-control" type="text" name="username" placeholder="superWoman"
+                        required="">
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input id="password" class="form-control" type="password" name="password" placeholder="******"
+                        required="">
+                </div>
+                <div class="form-group">
+                    <label for="nombre">Nombre</label>
+                    <input id="nombre" class="form-control" type="text" name="firstName" placeholder="Princesa Diana"
+                        required="">
+                </div>
 
-</form>
+                <div class="form-group">
+                    <label for="apellido">Apellido</label>
+                    <input id="apellido" class="form-control" type="text" name="lastName" placeholder="De Temiscira"
+                        required="">
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input id="email" class="form-control" type="email" name="email"
+                        placeholder="mujermaravilla@gmail.com" required="">
+                </div>
+                <div class="form-group">
+                    <label for="avatar">Imagen Avatar</label>
+                    <input id="avatar" class="form-control" type="text" name="avatar" placeholder="Url de la imagen"
+                        required="">
+                </div>
+                <div class="form-group">
+                    <label for="user-info">Sobre mi</label>
+                    <input id="user-info" class="form-control" type="text" name="info"
+                        placeholder="Informacion sobre la organizacion" required="">
+                </div>
+                <div class="form-group">
+                    <label for="codigo">Codigo de Administrador</label>
+                    <input id="codigo" class="form-control" type="text" name="adminCode" placeholder="Codigo Secreto">
+                </div>
+
+                <button class="btn btn-lg btn-danger btn-block">Registrarse</button>
+            </form>
+        </div>
+    </div>
+</div>
 
 <%- include("partials/footer") %>

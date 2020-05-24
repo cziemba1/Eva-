@@ -11,6 +11,11 @@
                 <input class="form-control" type="text" name="evento[name]" id="name" value="<%= evento.name%>">
             </div>
             <div class="form-group">
+                <label class="text-danger" for="cost">Costo</label>
+                <input class="form-control" type="number" name="evento[price]" id="cost" value="<%= evento.price%>"
+                    step="10" min="100" required>
+            </div>
+            <div class="form-group">
                 <label class="text-danger" for="image">Imagen</label>
                 <input class="form-control" type="text" name="evento[image]" id="image" value="<%= evento.image %>"
                     required>
@@ -27,4 +32,5 @@
         <a href="/eventos">Volver</a>
     </div>
 </div>
+
 <%- include("../partials/footer") %>

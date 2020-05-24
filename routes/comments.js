@@ -3,6 +3,7 @@ const router = express.Router({ mergeParams: true });
 const Evento = require("../models/eventos");
 const Comment = require("../models/comments");
 const middleware = require("../middleware");
+
 //NEW
 router.get("/new", middleware.isLoggedIn, (req, res) => {
   Evento.findById(req.params.id, (err, evento) => {
@@ -23,6 +24,7 @@ router.post("/", middleware.isLoggedIn, (req, res) => {
     } else {
       Comment.create(req.body.comment, (err, comment) => {
         if (err) {
+          req.flash("error", "Algo salio mal");
           console.log(err);
         } else {
           //add username and id to comment
@@ -31,6 +33,7 @@ router.post("/", middleware.isLoggedIn, (req, res) => {
           comment.save();
           evento.comments.push(comment);
           evento.save();
+          req.flash("success", "Comentario creado exitosamente");
           res.redirect(`/eventos/${evento._id}`);
         }
       });
@@ -41,6 +44,7 @@ router.post("/", middleware.isLoggedIn, (req, res) => {
 //Comment edit
 router.get(
   "/:comment_id/edit",
+  middleware.isLoggedIn,
   middleware.checkCommentPropiedad,
   (req, res) => {
     Comment.findById(req.params.comment_id, (err, foundComment) => {
@@ -65,6 +69,7 @@ router.put("/:comment_id", middleware.checkCommentPropiedad, (req, res) => {
       if (err) {
         res.redirect("back");
       } else {
+        req.flash("success", "Se han actualizado los campos correctamente");
         res.redirect(`/eventos/${req.params.id}`);
       }
     }
@@ -77,6 +82,7 @@ router.delete("/:comment_id", middleware.checkCommentPropiedad, (req, res) => {
     if (err) {
       res.redirect("back");
     } else {
+      req.flash("success", "Se ha eliminado el comentario correctamente");
       res.redirect(`/eventos/${req.params.id}`);
     }
   });

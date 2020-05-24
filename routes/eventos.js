@@ -25,6 +25,7 @@ router.get("/new", middleware.isLoggedIn, (req, res) => {
 //CREATE - Sube el nuevo evento a la db
 router.post("/", middleware.isLoggedIn, (req, res) => {
   const name = req.body.name;
+  const price = req.body.price;
   const image = req.body.image;
   const desc = req.body.description;
   const author = {
@@ -42,6 +43,7 @@ router.post("/", middleware.isLoggedIn, (req, res) => {
     if (err) {
       console.log(err);
     } else {
+      req.flash("success", "Evento creado exitosamente");
       res.redirect("eventos");
     }
   });
@@ -75,6 +77,7 @@ router.put("/:id", middleware.checkEventoPropiedad, (req, res) => {
       if (err) {
         res.redirect("/eventos");
       } else {
+        req.flash("success", "Se han actualizado los campos correctamente");
         res.redirect(`/eventos/${req.params.id}`);
       }
     }
@@ -87,6 +90,7 @@ router.delete("/:id", middleware.checkEventoPropiedad, (req, res) => {
     if (err) {
       res.redirect("/eventos");
     } else {
+      req.flash("success", "Se ha eliminado el evento correctamente");
       res.redirect("/eventos");
     }
   });
