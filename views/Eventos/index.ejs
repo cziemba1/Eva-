@@ -1,39 +1,94 @@
 <%- include("../partials/header") %>
 
-<header class="jumbotron">
-    <h1 class=".ml-md-auto"><span>Conectate a traves de</span><br>
-        eventos en todo el pais </h1>
-    <p>Encuentra eventos para todos los gustos</p>
-    <form action="/eventos" method="GET" class="form-inline" id="campground-search">
+<div class="container">
+    <header class="jumbotron">
+        <h1><span class="red navbar-brand" style="font-size: 3rem;">Conectáte a traves de</span><br>
+            eventos en todo el país </h1>
+        <form action="/eventos" method="GET" class="form-inline" id="campground-search" style="margin-top: 3rem">
+            <div class="form-group">
+                <input type="text" name="search" placeholder="Buscar evento..." class="form-control">
+            </div>
+        </form>
+    </header>
+</div>
+<nav class="navbar navbar-expand-md mb-4" style="margin: 0 3rem;">
+    <h1 class="navbar-brand ">Nuestros Eventos </h1>
+    <p>
+    <form action="/eventos" method="GET" class="form-inline" id="campground-search" style="margin-left: auto">
         <div class="form-group">
-            <input type="text" name="search" placeholder="Conferencia..." class="form-control">
-            <input type="submit" value="Buscar" class="btn btn-outline-danger">
+            <input type="text" name="search" placeholder="Buscar eventos" class="form-control">
         </div>
     </form>
-    <div class="py-3">
-        <p>O crea el tuyo!</p>
-        <a class="btn btn-outline-danger" href="/eventos/new">Crea tu propio evento!</a>
-    </div>
-    <img class="image-main" src="/1.png" alt="">
-</header>
-
-<h3 class="eventos-title">Nuestros eventos mas populares</h3>
-<div class="row text-center" id="evento-grid">
+    </p>
+</nav>
+<div class="row text-center" id="evento-grid" style="display:flex; flex-wrap: wrap;">
 
     <% eventos.forEach((evento) =>{ %>
     <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
-
         <div class="card">
             <img class="card-img-top" src="<%= evento.image %>" alt="<%= evento.name %>">
             <div class="card-body">
                 <h5 class="card-title"><%- evento.name -%></h5>
-                <p>$ <%- evento.price -%></p>
-                <a href="/eventos/<%= evento._id %>" class="btn btn-danger">Mas info</a>
+
+                <div>
+                    <span class=" btn btn-sm btn-danger"><i class="fas fa-heart"></i>
+                        <%= evento.likes.length %></span>
+                </div>
+                <a href=" /eventos/<%= evento._id %>" class="btn btn-danger" style="margin: 1rem">Mas info</a>
             </div>
         </div>
     </div>
     <% }); %>
 </div>
+
+<div class="container" style="width: 100vw;">
+    <div class="row text-center" style="width: 100vw; display:flex">
+        <% if (pages && pages > 0) { %>
+        <ul class="pagination text-center" style="justify-content:center; margin-left: 5rem">
+            <% if (current == 1) { %>
+            <li class="padding disabled"><a>Primera</a></li>
+            <% } else { %>
+            <li class="padding"><a href="/eventos<%if(search){%>?search=<%=search%><%}%>">Primera</a></li>
+                <% } %>
+         
+                <% if (current == 1) { %>
+                <li class=" padding disabled"><a>«</a></li>
+            <% } else { %>
+            <li class="padding"><a href="/eventos?page=<%= Number(current) - 1 %><%if(search){%>&search=<%=search%><%}%>">«</a></li>
+                <% } %>
+         
+                <% var i = (Number(current) > 5 ? Number(current) - 4 : 1) %>
+                <% if (i !== 1) { %>
+                <li class=" padding disabled"><a>...</a></li>
+            <% } %>
+            <% for (; i <= (Number(current) + 4) && i <= pages; i++) { %>
+            <% if (i == current) { %>
+            <li class="padding active"><a><%= i %></a></li>
+            <% } else { %>
+            <li class="padding"><a href="/eventos?page=<%= i %><%if(search){%>&search=<%=search%><%}%>"><%= i %></a></li>
+                <% } %>
+                <% if (i == Number(current) + 4 && i < pages) { %>
+                <li class=" padding disabled"><a>...</a></li>
+            <% } %>
+            <% } %>
+
+            <% if (current == pages) { %>
+            <li class="disabled padding"><a>»</a></li>
+            <% } else { %>
+            <li class="padding"><a href="/eventos?page=<%= Number(current) + 1 %><%if(search){%>&search=<%=search%><%}%>">»</a></li>
+                <% } %>
+         
+                <% if (current == pages) { %>
+                <li class=" padding disabled"><a>Ultima</a></li>
+            <% } else { %>
+            <li class="padding"><a href="/eventos?page=<%= pages %><%if(search){%>&search=<%=search%><%}%>">Ultima</a></li>
+                <% } %>
+            </ul>
+            <% } %>
+        </div>
+    </div>
+</div>
+
 
 
 

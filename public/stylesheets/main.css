@@ -35,7 +35,7 @@ body {
 
 .jumbotron {
   padding: 80px 270px;
-  background-color: transparent;
+  background-color: rgb(255, 209, 209);
 }
 
 .image-main {
@@ -76,4 +76,21 @@ footer {
 
 .padding-row {
   padding: 3rem 10rem;
+}
+
+.red {
+  color: #c82333;
+}
+
+.fa-search {
+  padding: 1rem;
+  font-size: 20px;
+}
+
+.navbar-brand {
+  font-weight: 900;
+}
+
+.padding {
+  margin: 0 0.5rem;
 }

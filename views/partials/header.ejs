@@ -8,6 +8,7 @@
     <title>EvA - Eventos Argentinos</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
         integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
     <link rel="stylesheet" href="/stylesheets/main.css">
 </head>
 
@@ -18,8 +19,8 @@
         <p>
         <form action="/eventos" method="GET" class="form-inline" id="campground-search">
             <div class="form-group">
+                <i class="fas fa-search red"></i>
                 <input type="text" name="search" placeholder="Buscar eventos" class="form-control">
-                <input type="submit" value="Buscar" class="text-danger button-custom">
             </div>
         </form>
         </p>
@@ -32,17 +33,19 @@
                 <li class="nav-item 
                 <% if(!currentUser){ %> 
                     <li class=" nav-item">
+                    <a href="/eventos" class="nav-link text-danger">Crear Evento</a>
+                </li>
+                <li class=" nav-item">
                     <a href="/login" class="nav-link text-danger">Iniciar Sesion</a>
                 </li>
                 <li class="nav-item">
                     <a href="/register" class="nav-link text-danger">Registrarse</a>
                 </li>
 
-                <a href="/eventos" class="nav-link text-danger">Crear Evento</a>
-                </li>
                 <%} else{ %>
                 <li class="nav-item">
-                <li class="nav-link text-danger">Logueado como <strong><%= currentUser.username %></strong> </li>
+                <li class="nav-link text-danger">Perfil <strong><%= currentUser.username %></strong> </li>
+                </li><a href="/eventos/new" class="nav-link text-danger">Crear Evento</a></li>
                 <a href="/logout" class="nav-link text-danger">Cerrar Sesion</a>
                 </li>
                 <%}  %>
